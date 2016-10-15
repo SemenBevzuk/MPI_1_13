@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	MPI_Init(&argc, &argv);
-	time1 = MPI_Wtime();
+	
 	MPI_Comm_size(MPI_COMM_WORLD, &thread_count);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -94,6 +94,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (rank == 0) {
+		time1 = MPI_Wtime();
 		matrix = CreateAndFillMatrixVector(n, m);
 		vector = new int[thread_count];
 		printf_s("n = %d, m = %d, thread_count = %d\n", n, m, thread_count);
@@ -149,12 +150,12 @@ int main(int argc, char* argv[]) {
 				MaxNumber = vector[i];
 			}
 		}
+		time2 = MPI_Wtime();
+		delta_time = time2 - time1;
+		printf_s("Time = %f; Time1 = %f; Time 2 = %f\n", delta_time, time1, time2);
 		printf_s("Max = %d\n", MaxNumber);
 	}
 	free(vector);
-	time2 = MPI_Wtime();
-	delta_time = time2 - time1;
-	printf_s("Time = %f; Time1 = %f; Time 2 = %f\n", delta_time, time1, time2);
 	MPI_Finalize();
 
 	return 0;
