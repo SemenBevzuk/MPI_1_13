@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPI_1_13", "MPI_1_13\MPI_1_13.vcxproj", "{C61FABEB-8FF1-4899-9F8E-A87549837E2B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsistentImp_lementation", "ConsistentImp_lementation\ConsistentImp_lementation.vcxproj", "{DA7182C9-E5C0-47FE-AABB-B77524AD4D17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{C61FABEB-8FF1-4899-9F8E-A87549837E2B}.Debug|Win32.Build.0 = Debug|Win32
 		{C61FABEB-8FF1-4899-9F8E-A87549837E2B}.Release|Win32.ActiveCfg = Release|Win32
 		{C61FABEB-8FF1-4899-9F8E-A87549837E2B}.Release|Win32.Build.0 = Release|Win32
+		{DA7182C9-E5C0-47FE-AABB-B77524AD4D17}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DA7182C9-E5C0-47FE-AABB-B77524AD4D17}.Debug|Win32.Build.0 = Debug|Win32
+		{DA7182C9-E5C0-47FE-AABB-B77524AD4D17}.Release|Win32.ActiveCfg = Release|Win32
+		{DA7182C9-E5C0-47FE-AABB-B77524AD4D17}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
