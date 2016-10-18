@@ -59,7 +59,7 @@ using namespace std;
 int main(int argc, char* argv[]) {
 	double time1, time2, delta_time_1, delta_time_2;
 	MPI_Status status;
-	FILE *f;
+	FILE *f=NULL;
 	int i;
 	int n, m;
 	int *vector;
@@ -157,13 +157,12 @@ int main(int argc, char* argv[]) {
 		printf_s("	Time = %f\n", delta_time_1);
 		printf_s("	Threads = %d\n", thread_count);
 		printf_s("	Max = %d\n\n", MaxNumber);
-		if (delta_time_1>EPS) {
-			fopen_s(&f, "../log/parallel.txt", "a");
-			fprintf(f, "%f %d %d %d\n", delta_time_1, n, m, thread_count);
+		if (delta_time_1 > EPS) {
+			fopen_s(&f,"../../log/parallel.txt", "a");
+			fprintf_s(f, "%f %d %d %d\n", delta_time_1, n, m, thread_count);
 			fflush(f);
 			fclose(f);
 		}
-
 		time1 = MPI_Wtime();
 		MaxNumber = FindMaxInMatrix(matrix, n, m);
 		time2 = MPI_Wtime();
@@ -172,7 +171,7 @@ int main(int argc, char* argv[]) {
 		printf_s("	Time = %f\n", delta_time_2);
 		printf_s("	Max = %d\n", MaxNumber);
 		if (delta_time_2>EPS) {
-			fopen_s(&f, "../log/consistent.txt", "a");
+			fopen_s(&f, "../../log/consistent.txt", "a");
 			fprintf(f, "%f %d %d\n", delta_time_2, n, m);
 			fflush(f);
 			fclose(f);
