@@ -1,0 +1,6 @@
+Consistent implementation; DeltaTime = 0.154898; Threads =2; n = 10000; m = 10000;
+Consistent implementation; DeltaTime = 0.003299; Threads =3; n = 2000; m = 2000;
+Consistent implementation; DeltaTime = 0.086955; Threads =3; n = 10000; m = 10000;
+Consistent implementation; DeltaTime = 0.069040; Threads =4; n = 10000; m = 10000;
+Consistent implementation; DeltaTime = 0.023668; Threads =5; n = 10000; m = 10000;
+Consistent implementation; DeltaTime = 0.040251; Threads =6; n = 10000; m = 10000;
