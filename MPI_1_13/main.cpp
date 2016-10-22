@@ -10,7 +10,7 @@ int* CreateAndFillMatrixVector(int n, int m) {
 	int i;
 	int* matrix = (int*)malloc(n * m * sizeof(int));
 	for (i = 0; i < n*m; i++) {
-		matrix[i] = 0 + rand() % 100;
+		matrix[i] = 0 + rand() % 1000;
 	}
 	return matrix;
 }
@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
 	int thread_count, rank;
 	int dataSize, bufferSize;
 	int deltaSize;
+	int MaxNumber;
 
 	if (argc >= 3) {
 		n = atoi(argv[1]);
@@ -77,7 +78,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	MPI_Init(&argc, &argv);
-	
 	MPI_Comm_size(MPI_COMM_WORLD, &thread_count);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -100,12 +100,7 @@ int main(int argc, char* argv[]) {
 
 		time1 = MPI_Wtime();
 		vector = new int[thread_count];
-	}
-	else {
-		vector = new int[bufferSize];
-	}
 
-	if (rank == 0) {
 		int *temp_start_matrix = matrix;
 
 		for (i = 1; i < thread_count; i++) {
@@ -118,12 +113,34 @@ int main(int argc, char* argv[]) {
 				temp_start_matrix = temp_start_matrix + bufferSize;
 			}
 		}
+		for (i = 1; i < thread_count; i++) {
+			int number;
+			MPI_Recv(&number, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
+			vector[status.MPI_SOURCE] = number;
+		}
+		MaxNumber = vector[1];
+		for (i = 1; i < thread_count; i++) {
+			if (vector[i]>MaxNumber) {
+				MaxNumber = vector[i];
+			}
+		}
+		time2 = MPI_Wtime();
+
+		delta_time_1 = time2 - time1;
+		printf_s("MPI:\n");
+		printf_s("	Time = %f\n", delta_time_1);
+		printf_s("	Threads = %d\n", thread_count);
+		printf_s("	Max = %d\n\n", MaxNumber);
+		if (delta_time_1 > EPS) {
+			fopen_s(&f, "../../log/parallel.txt", "a");
+			fprintf_s(f, "%f %d %d %d\n", delta_time_1, n, m, thread_count);
+			fflush(f);
+			fclose(f);
+		}
 	}
 	else {
+		vector = new int[bufferSize];
 		MPI_Recv(vector, bufferSize, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
-	}
-
-	if (rank != 0) {
 		int MaxNumber = vector[0];
 		for (i = 0; i < bufferSize; i++) {
 			if (vector[i]>MaxNumber) {
@@ -136,36 +153,10 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (rank == 0) {
-		for (i = 1; i < thread_count; i++) {
-			int number;
-			MPI_Recv(&number, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
-			vector[status.MPI_SOURCE] = number;
-		}
-	}
-
-	int MaxNumber;
-	if (rank == 0) {
-		MaxNumber = vector[1];
-		for (i = 1; i < thread_count; i++) {
-			if (vector[i]>MaxNumber) {
-				MaxNumber = vector[i];
-			}
-		}
-		time2 = MPI_Wtime();
-		delta_time_1 = time2 - time1;
-		printf_s("MPI:\n");
-		printf_s("	Time = %f\n", delta_time_1);
-		printf_s("	Threads = %d\n", thread_count);
-		printf_s("	Max = %d\n\n", MaxNumber);
-		if (delta_time_1 > EPS) {
-			fopen_s(&f,"../../log/parallel.txt", "a");
-			fprintf_s(f, "%f %d %d %d\n", delta_time_1, n, m, thread_count);
-			fflush(f);
-			fclose(f);
-		}
 		time1 = MPI_Wtime();
 		MaxNumber = FindMaxInMatrix(matrix, n, m);
 		time2 = MPI_Wtime();
+
 		delta_time_2 = time2 - time1;
 		printf_s("Ñonsistent implementation:\n");
 		printf_s("	Time = %f\n", delta_time_2);
@@ -176,6 +167,7 @@ int main(int argc, char* argv[]) {
 			fflush(f);
 			fclose(f);
 		}
+
 		printf_s("\nOptimal choice: ", MaxNumber);
 		if (delta_time_1<delta_time_2)
 		{
